@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bestie iPhone 💙</title>
+<title>JEONGMAL BAEGOPA 🍕🍔🍗🥯</title>
 
 <style>
 *{
@@ -13,46 +13,7 @@
     font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-/* ================= BODY ================= */
-body{
-    overflow:hidden;
-    background:#000;
-}
-
-/* ================= NOTIFICATIONS ================= */
-#notifications{
-    position:absolute;
-    top:60px;
-    width:100%;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:10px;
-    z-index:10;
-}
-
-.notif{
-    width:85%;
-    max-width:380px;
-    background:rgba(30,41,59,0.85);
-    backdrop-filter:blur(20px);
-    -webkit-backdrop-filter:blur(20px);
-    color:white;
-    padding:12px 14px;
-    border-radius:14px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.4);
-    font-size:13px;
-
-    opacity:0;
-    transform:translateY(-15px);
-    animation:drop 0.4s forwards;
-}
-
-@keyframes drop{
-    to{opacity:1; transform:translateY(0);}
-}
-
-/* ================= LOCK SCREEN ================= */
+/* ===== LOCK SCREEN ===== */
 #lockscreen{
     position:absolute;
     width:100%;
@@ -89,7 +50,7 @@ body{
     color:#94a3b8;
 }
 
-/* ================= APP ================= */
+/* ===== APP ===== */
 #app{
     display:none;
     height:100svh;
@@ -101,6 +62,7 @@ body{
         linear-gradient(180deg,#0b0f1a,#0f172a);
 }
 
+/* header */
 .header{
     background:#1f2937;
     color:white;
@@ -109,6 +71,7 @@ body{
     font-weight:600;
 }
 
+/* chat */
 .messages{
     flex:1;
     padding:15px;
@@ -118,6 +81,27 @@ body{
     gap:10px;
 }
 
+/* message row */
+.msg-row{
+    display:flex;
+    align-items:flex-end;
+    gap:8px;
+}
+
+/* avatar */
+.avatar{
+    width:28px;
+    height:28px;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:14px;
+    background:#374151;
+    color:white;
+}
+
+/* bubble */
 .msg{
     max-width:75%;
     padding:10px 14px;
@@ -129,7 +113,6 @@ body{
 .left{
     background:#374151;
     color:white;
-    align-self:flex-start;
     border-bottom-left-radius:5px;
 }
 
@@ -140,6 +123,7 @@ body{
     border-bottom-right-radius:5px;
 }
 
+/* input */
 .inputArea{
     display:flex;
     padding:10px;
@@ -164,25 +148,16 @@ button{
     background:#2563eb;
     color:white;
 }
-
-/* keep above bg */
-.messages, .header, .inputArea{
-    position:relative;
-    z-index:2;
-}
 </style>
 </head>
 
 <body>
 
-<!-- NOTIFICATIONS -->
-<div id="notifications"></div>
-
 <!-- LOCK SCREEN -->
 <div id="lockscreen" onclick="unlock()">
 
     <div class="time" id="time">9:41</div>
-    <div class="date">Bestie Mode 💙</div>
+    <div class="date">JEONGMAL BAEGOPA 🍕🍔🍗🥯</div>
 
     <div class="swipe">Tap to unlock</div>
 </div>
@@ -190,7 +165,7 @@ button{
 <!-- APP -->
 <div id="app">
 
-<div class="header">💙 Bestie Support Chat</div>
+<div class="header">JEONGMAL BAEGOPA 🍕🍔🍗🥯</div>
 
 <div class="messages" id="chat"></div>
 
@@ -203,7 +178,9 @@ button{
 
 <script>
 
-/* ================= TIME ================= */
+const chat = document.getElementById("chat");
+
+/* ===== TIME ===== */
 function updateTime(){
     const now = new Date();
     let h = now.getHours();
@@ -214,59 +191,60 @@ function updateTime(){
 setInterval(updateTime,1000);
 updateTime();
 
-/* ================= NOTIFICATIONS ================= */
-const notifBox = document.getElementById("notifications");
-
-const notifs = [
-    {n:"Baq", t:"Hey… are you okay? 🫂"},
-    {n:"Bat", t:"We miss you ❤️"},
-    {n:"Mizah", t:"Don’t shut yourself out 🥺"},
-    {n:"Syikin", t:"We’re here for you 💙"}
-];
-
-let ni = 0;
-
-function showNotif(){
-    if(ni >= notifs.length) return;
-
-    const d = notifs[ni];
-
-    const el = document.createElement("div");
-    el.className = "notif";
-    el.innerHTML = `<strong>${d.n}</strong>${d.t}`;
-
-    notifBox.appendChild(el);
-
-    ni++;
-    setTimeout(showNotif, 1500);
+/* ===== AVATARS ===== */
+function avatar(name){
+    if(name==="Baq") return "🐻";
+    if(name==="Bat") return "🦇";
+    if(name==="Mizah") return "🙈";
+    if(name==="Syikin") return "🐣";
 }
 
-/* start notifications */
-setTimeout(showNotif, 800);
+/* ===== MESSAGE ===== */
+function addMsg(text, side, name=null){
 
-/* ================= CHAT ================= */
-const chat = document.getElementById("chat");
+    const row = document.createElement("div");
+    row.classList.add("msg-row");
 
-function addMsg(text, side){
-    const div = document.createElement("div");
-    div.classList.add("msg", side);
-    div.innerText = text;
-    chat.appendChild(div);
+    const bubble = document.createElement("div");
+    bubble.classList.add("msg", side);
+    bubble.innerText = text;
+
+    if(side === "left"){
+        const av = document.createElement("div");
+        av.classList.add("avatar");
+        av.innerText = avatar(name);
+
+        row.appendChild(av);
+        row.appendChild(bubble);
+    } else {
+        row.style.justifyContent = "flex-end";
+        row.appendChild(bubble);
+    }
+
+    chat.appendChild(row);
     chat.scrollTop = chat.scrollHeight;
 }
 
-/* ================= UNLOCK ================= */
+/* ===== STORY STATE ===== */
+let stage = 1;
+
+/* ===== UNLOCK ===== */
 function unlock(){
     document.getElementById("lockscreen").style.display = "none";
     document.getElementById("app").style.display = "flex";
 
-    setTimeout(()=>addMsg("Baq: You’re finally here 🫂","left"),600);
-    setTimeout(()=>addMsg("Bat: We’ve been waiting for you ❤️","left"),1400);
-    setTimeout(()=>addMsg("Mizah: Talk to us okay 🥺","left"),2200);
-    setTimeout(()=>addMsg("Syikin: We’re not going anywhere 💙","left"),3000);
+    setTimeout(()=>intro(),600);
 }
 
-/* ================= SEND ================= */
+/* ===== INTRO (ALL REPLY) ===== */
+function intro(){
+    addMsg("Baq 🐻 Cyg: Hey… you’re here 🫂","left","Baq");
+    setTimeout(()=>addMsg("Bat 🦇 Cyg: We missed you ❤️","left","Bat"),700);
+    setTimeout(()=>addMsg("Mizah 🙈 Cyg: Talk to us okay 🥺","left","Mizah"),1400);
+    setTimeout(()=>addMsg("Syikin 🐣 Cyg: We’re staying with you 💙","left","Syikin"),2100);
+}
+
+/* ===== SEND ===== */
 function send(){
     const input = document.getElementById("input");
     const text = input.value.trim();
@@ -275,38 +253,89 @@ function send(){
     addMsg(text,"right");
     input.value="";
 
-    setTimeout(()=>reply(text),800);
+    setTimeout(()=>reply(text),900);
 }
 
-/* ================= REPLIES ================= */
+/* ===== EMOTIONAL GROUP STORY MODE ===== */
 function reply(text){
 
     const t = text.toLowerCase();
 
-    if(t.includes("sad") || t.includes("tired") || t.includes("stress")){
-        addMsg("Baq: Take it slow… you’re safe here ❤️","left");
-        setTimeout(()=>addMsg("Bat: We’re proud of you for still going 🫂","left"),800);
+    /* ===== STAGE 1 ===== */
+    if(stage === 1){
+
+        if(t.includes("sad") || t.includes("tired") || t.includes("stress")){
+
+            addMsg("Baq 🐻 Cyg: Breathe slowly… I’m here 🫂","left","Baq");
+
+            setTimeout(()=>addMsg("Bat 🦇 Cyg: You don’t have to carry this alone ❤️","left","Bat"),700);
+            setTimeout(()=>addMsg("Mizah 🙈 Cyg: It’s okay… really 🥺","left","Mizah"),1400);
+            setTimeout(()=>addMsg("Syikin 🐣 Cyg: We’re right here with you 💙","left","Syikin"),2100);
+
+            stage = 2;
+            return;
+        }
+    }
+
+    /* ===== STAGE 2 ===== */
+    if(stage === 2){
+
+        if(t.includes("alone")){
+
+            addMsg("Baq 🐻 Cyg: You are never alone 🫂","left","Baq");
+            setTimeout(()=>addMsg("Bat 🦇 Cyg: Even in silence, we stay ❤️","left","Bat"),700);
+            setTimeout(()=>addMsg("Mizah 🙈 Cyg: Please don’t shut us out 🥺","left","Mizah"),1400);
+            setTimeout(()=>addMsg("Syikin 🐣 Cyg: We’re still here 💙","left","Syikin"),2100);
+
+            stage = 3;
+            return;
+        }
+
+        if(t.includes("cry")){
+
+            addMsg("Mizah 🙈 Cyg: It’s okay to cry 🥺","left","Mizah");
+            setTimeout(()=>addMsg("Syikin 🐣 Cyg: We’ll stay until you feel better 💙","left","Syikin"),700);
+            setTimeout(()=>addMsg("Bat 🦇 Cyg: Let it out ❤️","left","Bat"),1400);
+            setTimeout(()=>addMsg("Baq 🐻 Cyg: You’re safe 🫂","left","Baq"),2100);
+
+            stage = 3;
+            return;
+        }
+    }
+
+    /* ===== STAGE 3 ===== */
+    if(stage === 3){
+
+        addMsg("Baq 🐻 Cyg: We’re proud of you 🫂","left","Baq");
+        setTimeout(()=>addMsg("Bat 🦇 Cyg: You’re stronger than you think ❤️","left","Bat"),700);
+        setTimeout(()=>addMsg("Mizah 🙈 Cyg: You matter so much 🥺","left","Mizah"),1400);
+        setTimeout(()=>addMsg("Syikin 🐣 Cyg: We love you 💙","left","Syikin"),2100);
+
+        stage = 4;
         return;
     }
 
-    if(t.includes("alone")){
-        addMsg("Mizah: You are never alone ❤️","left");
+    /* ===== STAGE 4 ===== */
+    if(stage === 4){
+
+        addMsg("Baq 🐻 Cyg: We’re not going anywhere 🫂","left","Baq");
+        setTimeout(()=>addMsg("Bat 🦇 Cyg: Stay with us ❤️","left","Bat"),700);
+        setTimeout(()=>addMsg("Mizah 🙈 Cyg: You’re safe here 🥺","left","Mizah"),1400);
+        setTimeout(()=>addMsg("Syikin 🐣 Cyg: Always with you 💙","left","Syikin"),2100);
+
         return;
     }
 
-    if(t.includes("cry")){
-        addMsg("Syikin: It’s okay… let it out 🥺","left");
-        return;
-    }
-
-    const fallback = [
-        "Baq: We’re listening 🫂",
-        "Bat: Tell us more ❤️",
-        "Mizah: We’re here okay 🥺",
-        "Syikin: Don’t keep it inside 💙"
+    /* ===== DEFAULT ===== */
+    const group = [
+        {n:"Baq", t:"Baq 🐻 Cyg: I hear you 🫂"},
+        {n:"Bat", t:"Bat 🦇 Cyg: Talk to us ❤️"},
+        {n:"Mizah", t:"Mizah 🙈 Cyg: We’re listening 🥺"},
+        {n:"Syikin", t:"Syikin 🐣 Cyg: We’re here 💙"}
     ];
 
-    addMsg(fallback[Math.floor(Math.random()*fallback.length)],"left");
+    const r = group[Math.floor(Math.random()*group.length)];
+    addMsg(r.t,"left",r.n);
 }
 
 </script>
