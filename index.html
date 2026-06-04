@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bestie iPhone 💙</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* ================= BODY ================= */
+body{
+    overflow:hidden;
+    background:#000;
+}
+
+/* ================= NOTIFICATIONS ================= */
+#notifications{
+    position:absolute;
+    top:60px;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+    z-index:10;
+}
+
+.notif{
+    width:85%;
+    max-width:380px;
+    background:rgba(30,41,59,0.85);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    color:white;
+    padding:12px 14px;
+    border-radius:14px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.4);
+    font-size:13px;
+
+    opacity:0;
+    transform:translateY(-15px);
+    animation:drop 0.4s forwards;
+}
+
+@keyframes drop{
+    to{opacity:1; transform:translateY(0);}
+}
+
+/* ================= LOCK SCREEN ================= */
+#lockscreen{
+    position:absolute;
+    width:100%;
+    height:100svh;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    color:white;
+
+    background:
+        radial-gradient(circle at 20% 20%, #ffd6e0, transparent 40%),
+        radial-gradient(circle at 80% 30%, #c7d2fe, transparent 45%),
+        radial-gradient(circle at 50% 80%, #fbcfe8, transparent 40%),
+        linear-gradient(135deg,#0f172a,#111827);
+}
+
+.time{
+    font-size:70px;
+    font-weight:200;
+}
+
+.date{
+    margin-top:10px;
+    color:#cbd5e1;
+}
+
+.swipe{
+    position:absolute;
+    bottom:40px;
+    font-size:14px;
+    color:#94a3b8;
+}
+
+/* ================= APP ================= */
+#app{
+    display:none;
+    height:100svh;
+    flex-direction:column;
+
+    background:
+        radial-gradient(circle at 20% 20%, #1f2937, transparent 60%),
+        radial-gradient(circle at 80% 70%, #0b0f1a, transparent 60%),
+        linear-gradient(180deg,#0b0f1a,#0f172a);
+}
+
+.header{
+    background:#1f2937;
+    color:white;
+    text-align:center;
+    padding:14px;
+    font-weight:600;
+}
+
+.messages{
+    flex:1;
+    padding:15px;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.msg{
+    max-width:75%;
+    padding:10px 14px;
+    border-radius:18px;
+    font-size:14px;
+    line-height:1.4;
+}
+
+.left{
+    background:#374151;
+    color:white;
+    align-self:flex-start;
+    border-bottom-left-radius:5px;
+}
+
+.right{
+    background:#2563eb;
+    color:white;
+    align-self:flex-end;
+    border-bottom-right-radius:5px;
+}
+
+.inputArea{
+    display:flex;
+    padding:10px;
+    background:#1f2937;
+    gap:10px;
+}
+
+input{
+    flex:1;
+    padding:12px;
+    border-radius:20px;
+    border:none;
+    outline:none;
+    background:#111827;
+    color:white;
+}
+
+button{
+    padding:10px 14px;
+    border:none;
+    border-radius:20px;
+    background:#2563eb;
+    color:white;
+}
+
+/* keep above bg */
+.messages, .header, .inputArea{
+    position:relative;
+    z-index:2;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NOTIFICATIONS -->
+<div id="notifications"></div>
+
+<!-- LOCK SCREEN -->
+<div id="lockscreen" onclick="unlock()">
+
+    <div class="time" id="time">9:41</div>
+    <div class="date">Bestie Mode 💙</div>
+
+    <div class="swipe">Tap to unlock</div>
+</div>
+
+<!-- APP -->
+<div id="app">
+
+<div class="header">💙 Bestie Support Chat</div>
+
+<div class="messages" id="chat"></div>
+
+<div class="inputArea">
+    <input id="input" placeholder="Message..." />
+    <button onclick="send()">Send</button>
+</div>
+
+</div>
+
+<script>
+
+/* ================= TIME ================= */
+function updateTime(){
+    const now = new Date();
+    let h = now.getHours();
+    let m = now.getMinutes();
+    if(m < 10) m = "0"+m;
+    document.getElementById("time").innerText = h+":"+m;
+}
+setInterval(updateTime,1000);
+updateTime();
+
+/* ================= NOTIFICATIONS ================= */
+const notifBox = document.getElementById("notifications");
+
+const notifs = [
+    {n:"Baq", t:"Hey… are you okay? 🫂"},
+    {n:"Bat", t:"We miss you ❤️"},
+    {n:"Mizah", t:"Don’t shut yourself out 🥺"},
+    {n:"Syikin", t:"We’re here for you 💙"}
+];
+
+let ni = 0;
+
+function showNotif(){
+    if(ni >= notifs.length) return;
+
+    const d = notifs[ni];
+
+    const el = document.createElement("div");
+    el.className = "notif";
+    el.innerHTML = `<strong>${d.n}</strong>${d.t}`;
+
+    notifBox.appendChild(el);
+
+    ni++;
+    setTimeout(showNotif, 1500);
+}
+
+/* start notifications */
+setTimeout(showNotif, 800);
+
+/* ================= CHAT ================= */
+const chat = document.getElementById("chat");
+
+function addMsg(text, side){
+    const div = document.createElement("div");
+    div.classList.add("msg", side);
+    div.innerText = text;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+}
+
+/* ================= UNLOCK ================= */
+function unlock(){
+    document.getElementById("lockscreen").style.display = "none";
+    document.getElementById("app").style.display = "flex";
+
+    setTimeout(()=>addMsg("Baq: You’re finally here 🫂","left"),600);
+    setTimeout(()=>addMsg("Bat: We’ve been waiting for you ❤️","left"),1400);
+    setTimeout(()=>addMsg("Mizah: Talk to us okay 🥺","left"),2200);
+    setTimeout(()=>addMsg("Syikin: We’re not going anywhere 💙","left"),3000);
+}
+
+/* ================= SEND ================= */
+function send(){
+    const input = document.getElementById("input");
+    const text = input.value.trim();
+    if(!text) return;
+
+    addMsg(text,"right");
+    input.value="";
+
+    setTimeout(()=>reply(text),800);
+}
+
+/* ================= REPLIES ================= */
+function reply(text){
+
+    const t = text.toLowerCase();
+
+    if(t.includes("sad") || t.includes("tired") || t.includes("stress")){
+        addMsg("Baq: Take it slow… you’re safe here ❤️","left");
+        setTimeout(()=>addMsg("Bat: We’re proud of you for still going 🫂","left"),800);
+        return;
+    }
+
+    if(t.includes("alone")){
+        addMsg("Mizah: You are never alone ❤️","left");
+        return;
+    }
+
+    if(t.includes("cry")){
+        addMsg("Syikin: It’s okay… let it out 🥺","left");
+        return;
+    }
+
+    const fallback = [
+        "Baq: We’re listening 🫂",
+        "Bat: Tell us more ❤️",
+        "Mizah: We’re here okay 🥺",
+        "Syikin: Don’t keep it inside 💙"
+    ];
+
+    addMsg(fallback[Math.floor(Math.random()*fallback.length)],"left");
+}
+
+</script>
+
+</body>
+</html>
